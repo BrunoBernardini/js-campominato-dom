@@ -42,10 +42,8 @@ function reset(){
 }
 
 /**
- * Crea un array con numeri random univoci.
- * @param {Number} size 
- * @param {Number} min 
- * @param {Number} max 
+ * Creazione lista delle bombe.
+ * @param {Number} cellsQuantity 
  * @returns 
  */
 function createBombsList(cellsQuantity){
@@ -67,9 +65,7 @@ function createBombsList(cellsQuantity){
 function createField(cellsQuantity, field){
   for(let i=1; i<=cellsQuantity; i++){
     const cell = createCell(field, i);
-    cell.addEventListener("click", function(){
-      this.classList.add("clicked");
-    })
+    cell.addEventListener("click", cellClickHandler);
   }
 }
 
@@ -86,6 +82,18 @@ function createCell(target, number){
   if(bombList.includes(number)) cell.classList.add("bomb");
   target.append(cell);
   return cell;
+}
+
+
+function cellClickHandler(){
+  this.classList.add("clicked");
+  if(this.classList.contains("bomb")){
+    console.log("BOMBAH!");
+    const grid = document.querySelectorAll(".cell");
+    for(let i=0; i<grid.length; i++){
+      grid[i].removeEventListener("click", cellClickHandler);
+    }
+  }
 }
 
 /**
