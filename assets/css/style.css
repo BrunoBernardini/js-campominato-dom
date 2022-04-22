@@ -34,22 +34,20 @@ main{
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: black;
   border: 2px solid white;
   border-radius: 7px;
   margin-right: 5px;
-}
-
-.field .cell span{
-  display: none;
+  cursor: pointer;
 }
 
 .field .cell.clicked{
   background-color: cornflowerblue;
+  color: white;
 }
 
-.field .cell.clicked span{
-  display: block;
+.field .cell.clicked.bomb{
+  background-color: darkred;
 }
 
 .field .cell.big{

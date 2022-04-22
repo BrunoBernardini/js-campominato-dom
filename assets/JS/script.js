@@ -17,7 +17,8 @@ Al termine della partita il software deve comunicare il punteggio, cioè il nume
 
 const playBtn = document.getElementById("play");
 const field = document.querySelector(".field");
-let numberList = [];
+const BOMBS_QUANTITY = 16;
+let bombList;
 
 playBtn.addEventListener("click", init);
 
@@ -28,30 +29,61 @@ function init(){
   }
   else{
     reset();
-    for(let i=0; i<cellsQuantity; i++){
-      const cell = createCell(field);
-      cell.addEventListener("click", function(){
-        this.classList.add("clicked");
-      })
-    }
+    bombList = createBombsList(cellsQuantity);
+    createField(cellsQuantity, field);
   }
 }
 
+/**
+ * Reset della griglia e dell'array di getUniqueRandomNumber.
+ */
 function reset(){
-  numberList = [];
   field.innerHTML = "";
 }
 
 /**
- * Crea una cella.
- * @param {HTMLDivElement} target 
+ * Crea un array con numeri random univoci.
+ * @param {Number} size 
+ * @param {Number} min 
+ * @param {Number} max 
+ * @returns 
  */
-function createCell(target){
+function createBombsList(cellsQuantity){
+  const bombList = [];
+  while(bombList.length<BOMBS_QUANTITY){
+    const bomb = getRandomNumber(1, cellsQuantity)
+    if(!bombList.includes(bomb)){
+      bombList.push(bomb);
+    }
+  }
+  return bombList;
+}
+
+/**
+ * Crea il campo di gioco.
+ * @param {Number} cellsQuantity 
+ * @param {HTMLDivElement} field 
+ */
+function createField(cellsQuantity, field){
+  for(let i=1; i<=cellsQuantity; i++){
+    const cell = createCell(field, i);
+    cell.addEventListener("click", function(){
+      this.classList.add("clicked");
+    })
+  }
+}
+
+/**
+ * Crea una cella.
+ * @param {HTMLDivElement} target
+ * @returns 
+ */
+function createCell(target, number){
   const cell = document.createElement("div");
   cell.className = "cell";
-  const number = getUniqueRandomNumber(1,getCellsQuantity());
   cell.innerHTML = `<span>${number}</span>`
   cell.classList.add(getCellSize());
+  if(bombList.includes(number)) cell.classList.add("bomb");
   target.append(cell);
   return cell;
 }
@@ -101,25 +133,6 @@ function getCellsQuantity(){
       break;
   }
   return quantity;
-}
-
-/**
- * Estrae un numero random diverso da quelli estratti in precedenza.
- * @param {number} min 
- * @param {number} max 
- * @returns 
- */
-function getUniqueRandomNumber(min, max){
-  let number = null;
-  let valid = false;
-  while(!valid){
-    number = getRandomNumber(min, max);
-    if(!numberList.includes(number)){
-      valid = true;
-      numberList.push(number);
-    }
-  }
-  return number;
 }
 
 function getRandomNumber(min, max){
