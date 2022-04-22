@@ -72,6 +72,7 @@ function createField(cellsQuantity, field){
 /**
  * Crea una cella.
  * @param {HTMLDivElement} target
+ * @param {Number} number 
  * @returns 
  */
 function createCell(target, number){
@@ -84,14 +85,18 @@ function createCell(target, number){
   return cell;
 }
 
-
+/**
+ * Gestione click delle celle.
+ */
 function cellClickHandler(){
   this.classList.add("clicked");
   if(this.classList.contains("bomb")){
-    console.log("BOMBAH!");
     const grid = document.querySelectorAll(".cell");
     for(let i=0; i<grid.length; i++){
       grid[i].removeEventListener("click", cellClickHandler);
+      if(grid[i].classList.contains("bomb")){
+        grid[i].classList.add("clicked");
+      }
     }
   }
 }
