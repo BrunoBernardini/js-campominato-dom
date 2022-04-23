@@ -16,9 +16,9 @@ Al termine della partita il software deve comunicare il punteggio, cioè il nume
  */
 
 const playBtn = document.getElementById("play");
-const field = document.querySelector(".field");
+const field = document.querySelector("main");
 const BOMBS_QUANTITY = 16;
-let bombList;
+let bombList, counter;
 
 playBtn.addEventListener("click", init);
 
@@ -31,9 +31,10 @@ function init(){
     alert("Devi selezionare una difficoltà!")
   }
   else{
-    playBtn.innerHTML = "Nuova partita";
     reset();
     bombList = createBombsList(cellsQuantity);
+    console.log("Vieni a cercare le soluzioni qui? Sei un furbone! Ecco a te. ;)");
+    console.log(bombList);
     createField(cellsQuantity, field);
   }
 }
@@ -43,6 +44,9 @@ function init(){
  */
 function reset(){
   field.innerHTML = "";
+  playBtn.innerHTML = "Nuova partita";
+  counter = 0;
+  console.clear();
 }
 
 /**
@@ -67,10 +71,14 @@ function createBombsList(cellsQuantity){
  * @param {HTMLDivElement} field 
  */
 function createField(cellsQuantity, field){
+  const grid = document.createElement("div");
+  grid.className = "field";
+  grid.classList.add("d-flex", "justify-content-between", "align-content-between", "flex-wrap", "mb-4")
   for(let i=1; i<=cellsQuantity; i++){
-    const cell = createCell(field, i);
+    const cell = createCell(grid, i);
     cell.addEventListener("click", cellClickHandler);
   }
+  field.append(grid);
 }
 
 /**
@@ -95,15 +103,33 @@ function createCell(target, number){
 function cellClickHandler(){
   this.classList.add("clicked");
   if(this.classList.contains("bomb")){
-    const grid = document.querySelectorAll(".cell");
-    for(let i=0; i<grid.length; i++){
-      grid[i].removeEventListener("click", cellClickHandler);
-      grid[i].classList.add("disabled");
-      if(grid[i].classList.contains("bomb")){
-        grid[i].classList.add("clicked");
-      }
+    stopGame(false, `Hai perso! [${counter}/${getCellsQuantity()-BOMBS_QUANTITY}]`);
+  }
+  else{
+    counter++;
+    if(counter === (getCellsQuantity()-BOMBS_QUANTITY)){
+      stopGame(true, "Hai vinto! :D");
     }
   }
+}
+
+/**
+ * Gestione pagina dopo la conclusione della partita.
+ * @param {Boolean} victory
+ * @param {String} outputMsg 
+ */
+function stopGame(victory, outputMsg){
+  const grid = document.querySelectorAll(".cell");
+  const output = document.createElement("h2");
+  output.innerHTML = outputMsg;
+  for(let i=0; i<grid.length; i++){
+    grid[i].removeEventListener("click", cellClickHandler);
+    grid[i].classList.add("disabled");
+    if(grid[i].classList.contains("bomb") && !victory){
+      grid[i].classList.add("clicked");
+    }
+  }
+  field.append(output);
 }
 
 /**
@@ -153,6 +179,12 @@ function getCellsQuantity(){
   return quantity;
 }
 
+/**
+ * Ottiene un numero intero random compreso tra min e max.
+ * @param {Number} min 
+ * @param {Number} max 
+ * @returns 
+ */
 function getRandomNumber(min, max){
   return Math.floor(Math.random()*(max-min+1)+min);
 }
