@@ -22,12 +22,16 @@ let bombList;
 
 playBtn.addEventListener("click", init);
 
+/**
+ * Istruzioni eseguite al click del pulsante "Gioca".
+ */
 function init(){
   const cellsQuantity = getCellsQuantity();
   if(!cellsQuantity){
     alert("Devi selezionare una difficoltà!")
   }
   else{
+    playBtn.innerHTML = "Nuova partita";
     reset();
     bombList = createBombsList(cellsQuantity);
     createField(cellsQuantity, field);
@@ -94,6 +98,7 @@ function cellClickHandler(){
     const grid = document.querySelectorAll(".cell");
     for(let i=0; i<grid.length; i++){
       grid[i].removeEventListener("click", cellClickHandler);
+      grid[i].classList.add("disabled");
       if(grid[i].classList.contains("bomb")){
         grid[i].classList.add("clicked");
       }
