@@ -33,8 +33,8 @@ function init(){
   else{
     reset();
     bombList = createBombsList(cellsQuantity);
-    console.log("Vieni a cercare le soluzioni qui? Sei un furbone! Ecco a te. ;)");
-    console.log(bombList);
+    console.log("Vieni a cercare le soluzioni qui? Sei un furbone!");
+    console.log("Ecco a te la lista delle bombe. ;)"bombList);
     createField(cellsQuantity, field);
   }
 }
@@ -90,6 +90,7 @@ function createField(cellsQuantity, field){
 function createCell(target, number){
   const cell = document.createElement("div");
   cell.className = "cell";
+  cell.classList.add("unclicked");
   cell.innerHTML = `<span>${number}</span>`
   cell.classList.add(getCellSize());
   if(bombList.includes(number)) cell.classList.add("bomb");
@@ -102,13 +103,14 @@ function createCell(target, number){
  */
 function cellClickHandler(){
   this.classList.add("clicked");
+  this.classList.remove("unclicked");
   if(this.classList.contains("bomb")){
     stopGame(false, `Hai perso! [${counter}/${getCellsQuantity()-BOMBS_QUANTITY}]`);
   }
   else{
     counter++;
     if(counter === (getCellsQuantity()-BOMBS_QUANTITY)){
-      stopGame(true, "Hai vinto! :D");
+      stopGame(true, "Vittoria! :D");
     }
   }
 }
@@ -125,6 +127,7 @@ function stopGame(victory, outputMsg){
   for(let i=0; i<grid.length; i++){
     grid[i].removeEventListener("click", cellClickHandler);
     grid[i].classList.add("disabled");
+    grid[i].classList.remove("unclicked");
     if(grid[i].classList.contains("bomb") && !victory){
       grid[i].classList.add("clicked");
     }

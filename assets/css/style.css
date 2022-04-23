@@ -9,20 +9,25 @@ body{
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-header{
+header,
+footer{
   background-color: aliceblue;
   height: 70px;
 }
 
-h1,
-h2,
-h4{
-  font-weight: bolder;
-  color: white;
+main{
+  height: calc(100vh - 140px);
 }
 
-main{
-  height: calc(100vh - 70px);
+h1,
+h2,
+h5{
+  font-weight: bolder;
+  color: aliceblue;
+}
+
+h1{
+  font-size: 100px;
 }
 
 .field{
@@ -41,11 +46,13 @@ main{
   border: 2px solid white;
   border-radius: 7px;
   margin-right: 5px;
-  cursor: pointer;
+  transition: all 0.15s;
 }
 
-.field .cell.disabled{
-  cursor: default;
+.field .cell.unclicked:hover{
+  cursor: pointer;
+  transform: scale(1.15);
+  background-color: rgba(255, 255, 255, .4);
 }
 
 .field .cell.clicked{
@@ -54,7 +61,7 @@ main{
 }
 
 .field .cell.clicked.bomb{
-  background-color: darkred;
+  background-color: rgb(199, 0, 0);
 }
 
 .field .cell.big{
